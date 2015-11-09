@@ -9,13 +9,15 @@ output:
 ## 1. Loading and preprocessing the data
 
 #### 1a. Load required modules
-```{r echo=TRUE, eval=FALSE}
+
+```r
 packs <- c("ggplot2","dplyr","lubridate","scales","knitr")
 lapply(packs, require, character.only=T)
 ```
 
 #### 1b. Load data file; Downloaded to local
-```{r echo=TRUE, eval=TRUE}
+
+```r
 data <- read.csv("activity.csv",stringsAsFactors=FALSE)
 ```
 In my opinion, the current format of the data is appropriate for my planned analyses.
@@ -29,14 +31,16 @@ a histogram showing the distribution of average steps per day, is provided below
 ##### Group by date
 Begin by using the group_by function from the dplyr package to group the
 main data frame by the date column.
-```{r echo=TRUE, eval=TRUE}
+
+```r
 by_date <- group_by(data,date)
 ```
 
 ##### Get the total number of steps taken each day
 Use the "summarise" function from the dplyr package to get the total 
 total number of steps taken each day.
-```{r echo=TRUE, eval=FALSE}
+
+```r
 steps.per.day <- summarise(by_date,total_steps=sum(steps,na.rm=T))
 ```
 
@@ -44,7 +48,8 @@ steps.per.day <- summarise(by_date,total_steps=sum(steps,na.rm=T))
 Using the data frame "steps.per.day", make a histogram showing the distribution
 of total steps taken each day across each of the 61 days for which data were 
 available.
-```{r echo=TRUE, eval=TRUE}
+
+```r
 ggplot(steps.per.day,aes(total_steps)) + 
   geom_histogram(fill="deepskyblue",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -57,42 +62,37 @@ ggplot(steps.per.day,aes(total_steps)) +
         axis.ticks.x = element_line(color="black"),
         axis.ticks.y = element_line(color="black"),
         panel.border = element_rect(color="black",fill=FALSE))
-```  
+```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 _Figure 1. Histogram showing the distribution of total steps taken per day._
 
 #### 2c. Calculate and report the mean and median of the total number of steps taken per day
 Using the data frame "steps.per.day", get the mean and median for total steps taken 
 across all 61 days for which data were available.
-```{r echo=TRUE, eval=TRUE}
+
+```r
 summarise(steps.per.day,mean_steps=mean(total_steps),med_steps=median(total_steps))
 ```
 
+```
+## Source: local data frame [1 x 2]
+## 
+##   mean_steps med_steps
+## 1    9354.23     10395
+```
+
 ##### Add mean and median lines to histogram.
-```{r echo=FALSE, eval=TRUE}
-ggplot(steps.per.day,aes(total_steps)) + 
-  geom_histogram(fill="deepskyblue",color="black",binwidth=700) +
-  xlab("Total Steps Per Day") + 
-  ylab("Number of Days (Binwidth = 700)") +
-  scale_y_continuous(breaks=seq(0,10,2)) +
-  geom_vline(x=c(9354.23,10395),
-        linetype=c("solid","longdash"),
-        color=c("black","red"),size=1) +
-  theme(axis.title.x = element_text(face='bold',size=16,vjust=0.1),
-        axis.title.y = element_text(face='bold',size=16,vjust=0.8),
-        axis.text.x = element_text(face='bold',size=14,color='black'),
-        axis.text.y = element_text(face='bold',size=14,color='black'),
-        axis.ticks.x = element_line(color="black"),
-        axis.ticks.y = element_line(color="black"),
-        panel.border = element_rect(color="black",fill=FALSE))
-```  
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
 
 _Figure 2. Histogram showing the distribution of total steps taken per day._  
 _The solid black line shows the mean, and the red dotted line shows the median._
 
 This was accomplished by adding the following line to the graph 
 code above:
-```{r echo=TRUE, eval=FALSE}
+
+```r
 geom_vline(x=c(9354.23,10395),
         linetype=c("solid","longdash"),
         color=c("black","red"),size=1)
@@ -102,7 +102,8 @@ geom_vline(x=c(9354.23,10395),
 #### 3a. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
 ##### Group by interval
-```{r echo=TRUE, eval=TRUE}
+
+```r
 by_interval <- group_by(data,interval)
 steps.ave.interval <- summarise(by_interval,mean_steps=mean(steps,na.rm=T),
                                 med_steps=median(steps,na.rm=T))
@@ -112,7 +113,8 @@ The resulting data frame has 288 cases (17568 5 min intervals / 61 days), which 
 ##### Create the time series plot using ggplot2 plotting system
 The ggplot2 plotting system is my super favorite plotting system. <3
 Here's my time series plot:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 ggplot(steps.ave.interval,aes(interval,mean_steps)) + 
   geom_line(color="blue",size=1) +
   xlab("Interval (5 min / interval)") +
@@ -126,7 +128,9 @@ ggplot(steps.ave.interval,aes(interval,mean_steps)) +
         panel.grid = element_blank(),
         panel.background = element_rect(fill="white"),
         panel.border = element_rect(color="black",fill=FALSE))
-```  
+```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 _Figure 3. Time series graph showing the average number of steps per interval across all days._
 
@@ -134,13 +138,22 @@ _Figure 3. Time series graph showing the average number of steps per interval ac
 ##### Get the index of the inverval that contains the max value
 From the data frame steps.ave.interval, find the index of the maximum value
 for the mean number of steps in that five-minute interval:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 max_in_interval <- with(steps.ave.interval,match(max(mean_steps),mean_steps))
 ```
 Next, display the row in the data frame that contains the maximum average number of 
 steps per interval.
-```{r echo=TRUE, eval=TRUE}
+
+```r
 steps.ave.interval[max_in_interval,]
+```
+
+```
+## Source: local data frame [1 x 3]
+## 
+##   interval mean_steps med_steps
+## 1      835   206.1698        19
 ```
 The interval with the highest average number of steps is interval 835. That interval
 had, on average, 206.17 steps. This average is based on the average across all 61 days
@@ -155,8 +168,13 @@ the estimate of the mean and median number of steps taken each day.
 
 #### 4a. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 There were a total of 2304 rows in the data set with missing values for the variable "steps".
-```{r echo=TRUE, eval=TRUE}
+
+```r
 sum(is.na(data$steps))
+```
+
+```
+## [1] 2304
 ```
 
 #### 4b. Devise a strategy for filling in all of the missing values in the dataset. 
@@ -169,19 +187,23 @@ intervals. If some intervals have a large number of missing values, median may n
 best choice, and I may wish to evaluate other available options.
 
 This code gets the total number of NA values for each interval:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 total.na.interval <- with(data,by(is.na(steps),data[,"interval"],sum,na.rm=T))
 ```
 
 It looks like each interval has a total of 8 missing values out of 61 total observations.
 Here's a graph showing the count of missing values across intervals:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 plot(total.na.interval,
      main="Count of Missing Observations Per Interval",
      xlab="Interval Index", 
      ylab="Count of Missing Observations",
      font.lab=2)
-```  
+```
+
+![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png) 
 
 _Figure 4. Count of missing values by interval._
 
@@ -192,7 +214,8 @@ steps.ave.interval. I'm sure this is not the most elegant way of accomplishing t
 I'd love to a better code example.
 
 First, here's a vector to hold new values:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 newvals <- c()
 ```
 
@@ -202,7 +225,8 @@ based on all the non-NA values for that interval. The values used will not be co
 Instead, values will be taken from the data frame created in a earlier step: steps.ave.interval. 
 
 Here's the code:
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 for (i in 1:nrow(data)) {
   if (is.na(data$steps[[i]]) == TRUE) {
     cur_int <- data$interval[[i]] # save the interval for the current line to a variable
@@ -223,7 +247,8 @@ In this step I was actually planning to just add the vector to the original df a
 However, because the assignment instructions say to make another data frame, I'll go ahead and 
 do that.
 
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 data.no.missing <- data # copy the original df
 data.no.missing$steps <- newvals # replace steps column with vector newvals
 ```
@@ -233,18 +258,21 @@ This really was a multi-part question, so I'm breaking it up.
 
 First, using the new no-missings data frame, create a new steps.per.day data frame:
 
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 by_day_nm <- group_by(data.no.missing,date)
 ```
 
 Next, use "summarise" from dplyr to get total for each day. For some reason 
 "summarize", which should be equivalent, doesn't always work:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 steps.per.day.nm <- summarise(by_day_nm,total_steps=sum(steps,na.rm=T))
 ```
 
 Now I'll create the updated histogram:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 ggplot(steps.per.day.nm,aes(total_steps)) + 
   geom_histogram(fill="darkgreen",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -257,15 +285,25 @@ ggplot(steps.per.day.nm,aes(total_steps)) +
         axis.ticks.x = element_line(color="black"),
         axis.ticks.y = element_line(color="black"),
         panel.border = element_rect(color="black",fill=FALSE))
-```  
+```
+
+![plot of chunk unnamed-chunk-21](figure/unnamed-chunk-21-1.png) 
 
 _Figure 5. Histogram showing the distribution of total steps taken per day_  
 _after missing values were replaced with the interval median._
 
 
 #### 4d. Part II: Calculate and report the mean and median total number of steps taken per day. 
-```{r echo=TRUE, eval=TRUE}
+
+```r
 summarise(steps.per.day.nm,mean_steps=mean(total_steps),med_steps=median(total_steps))
+```
+
+```
+## Source: local data frame [1 x 2]
+## 
+##   mean_steps med_steps
+## 1   9503.869     10395
 ```
 The mean is greater after the missing values are replaced with the interval median.
 
@@ -276,30 +314,15 @@ This was not surprising to me. Nope.
 
 Just for fun, let's add lines showing the mean and median to the histogram.
 
-```{r echo=FALSE, eval=TRUE}
-ggplot(steps.per.day.nm,aes(total_steps)) + 
-  geom_histogram(fill="darkgreen",color="black",binwidth=700) +
-  xlab("Total Steps Per Day") + 
-  ylab("Number of Days (Binwidth = 700)") +
-  scale_y_continuous(breaks=seq(0,10,2),limits=c(0,10)) +
-  geom_vline(x=c(9503.9,10395),
-        linetype=c("solid","longdash"),
-        color=c("black","red"),size=1) +
-  theme(axis.title.x = element_text(face='bold',size=16,vjust=0.1),
-        axis.title.y = element_text(face='bold',size=16,vjust=0.8),
-        axis.text.x = element_text(face='bold',size=14,color='black'),
-        axis.text.y = element_text(face='bold',size=14,color='black'),
-        axis.ticks.x = element_line(color="black"),
-        axis.ticks.y = element_line(color="black"),
-        panel.border = element_rect(color="black",fill=FALSE))
-```  
+![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
 
 _Figure 6. Histogram showing the distribution of total steps taken per day_  
 _after missing values were replaced with the interval median._  
 _The solid black line shows the mean, and the red dotted line shows the median._  
 
 Again, here is the code that adds the lines:
-```{r echo=TRUE, eval=FALSE}
+
+```r
 geom_vline(x=c(9503.9,10395),linetype=c("solid","longdash"),color=c("black","red"),size=1)
 ```
 
@@ -323,18 +346,21 @@ The new column should indicate whether a given date is a weekday or weekend day.
 There might be a way to do this in just one step, but I don't know what it is. 
 
 ##### Create a new "days of week" column in df data.no.missing
-```{r echo=TRUE, eval=TRUE}
+
+```r
 data.no.missing$dow <- weekdays(as.POSIXct(data.no.missing$date))
 ```
 
 ##### Create the new "is_weekend" variable by recoding the variable "dow"
-```{r echo=TRUE, eval=TRUE}
+
+```r
 data.no.missing$is_weekend <- with(data.no.missing,
                                    ifelse(dow == "Saturday" | dow == "Sunday","Weekend","Weekday"))
 ```
 
 ##### Make the new "is_weekend" column a factor
-```{r echo=TRUE, eval=TRUE}
+
+```r
 data.no.missing$is_weekend <- factor(data.no.missing$is_weekend)
 ```
 
@@ -344,14 +370,16 @@ may be less reliable than for weekday activity patterns.
 
 ##### Group the data frame (the one with missing values replaced) by interval
 First, group the data by interval, then get mean steps by interval.
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 by_interval_weekday <- group_by(data.no.missing,is_weekend,interval)
 steps.ave.interval.wd <- summarise(by_interval_weekday,mean_steps=mean(steps,na.rm=T))
 # Resulting data frame has 576 cases (17568 5 min intervals / 61 days = 288; 288*2)
 ```
 
 ##### Create the time series plot using ggplot2:
-```{r echo=TRUE, eval=TRUE}
+
+```r
 ggplot(steps.ave.interval.wd,aes(interval,mean_steps)) + 
   geom_line(color="blue",size=1) +
   xlab("Interval (5 min / interval)") +
@@ -367,17 +395,28 @@ ggplot(steps.ave.interval.wd,aes(interval,mean_steps)) +
         panel.grid = element_blank(),
         panel.background = element_rect(fill="white"),
         panel.border = element_rect(color="black",fill=FALSE))
-```  
+```
+
+![plot of chunk unnamed-chunk-29](figure/unnamed-chunk-29-1.png) 
 
 _Figure 7. Average number of steps by interval for weekdays and weekends_  
 
 Looking separately at weekdays and weekends, in which interval does the maximum average 
 number of steps occur?  
 
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 summarise(steps.ave.interval.wd,max_steps=max(mean_steps),
           day_ave=mean(mean_steps),
           what_index=match(max_steps,mean_steps))
+```
+
+```
+# Source: local data frame [2 x 4]
+# 
+#   is_weekend max_steps  day_ave what_index
+# 1    Weekday  205.4222 31.15448        104
+# 2    Weekend  155.0000 38.18880        112
 ```
 
 Just for fun, let's look at which intervals throughout the day differ most between
@@ -385,7 +424,8 @@ weekdays and weekends. First, I will create a new data frame that includes a
 variable that is the difference between average number of steps for each interval
 on weekdays and on weekends. 
 
-```{r echo=TRUE, eval=TRUE, comment="#"}
+
+```r
 # Grab vectors out of existing data frames
 steps_weekend <- with(steps.ave.interval.wd,mean_steps[289:576])
 steps_weekday <- with(steps.ave.interval.wd,mean_steps[1:288])
@@ -405,7 +445,8 @@ that fall above the red line mean that the person was more active for that
 interval on weekdays, and observations that fall below the red line mean
 the person was more active, on average, on weekends.
 
-```{r echo=TRUE, eval=TRUE}
+
+```r
 ggplot(activity.diff,aes(interval,mean_steps)) +
   geom_hline(y=0,color="red",linetype="longdash",size=1) +
   geom_line(color="blue",size=1) +
@@ -420,7 +461,9 @@ ggplot(activity.diff,aes(interval,mean_steps)) +
         panel.grid = element_blank(),
         panel.background = element_rect(fill="white"),
         panel.border = element_rect(color="black",fill=FALSE))
-```  
+```
+
+![plot of chunk unnamed-chunk-32](figure/unnamed-chunk-32-1.png) 
 
 _Figure 8. Time series plot showing differences in activity level between weekdays_
 _and weekends._
