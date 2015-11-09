@@ -64,7 +64,7 @@ ggplot(steps.per.day,aes(total_steps)) +
         panel.border = element_rect(color="black",fill=FALSE))
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![plot of chunk fig_1](figure/fig_1-1.png) 
 
 _Figure 1. Histogram showing the distribution of total steps taken per day._
 
@@ -84,7 +84,7 @@ summarise(steps.per.day,mean_steps=mean(total_steps),med_steps=median(total_step
 ```
 
 ##### Add mean and median lines to histogram.
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
+![plot of chunk fig_2](figure/fig_2-1.png) 
 
 _Figure 2. Histogram showing the distribution of total steps taken per day._  
 _The solid black line shows the mean, and the red dotted line shows the median._
@@ -130,7 +130,7 @@ ggplot(steps.ave.interval,aes(interval,mean_steps)) +
         panel.border = element_rect(color="black",fill=FALSE))
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+![plot of chunk fig_3](figure/fig_3-1.png) 
 
 _Figure 3. Time series graph showing the average number of steps per interval across all days._
 
@@ -203,7 +203,7 @@ plot(total.na.interval,
      font.lab=2)
 ```
 
-![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15-1.png) 
+![plot of chunk fig_4](figure/fig_4-1.png) 
 
 _Figure 4. Count of missing values by interval._
 
@@ -287,7 +287,7 @@ ggplot(steps.per.day.nm,aes(total_steps)) +
         panel.border = element_rect(color="black",fill=FALSE))
 ```
 
-![plot of chunk unnamed-chunk-21](figure/unnamed-chunk-21-1.png) 
+![plot of chunk fig_5](figure/fig_5-1.png) 
 
 _Figure 5. Histogram showing the distribution of total steps taken per day_  
 _after missing values were replaced with the interval median._
@@ -314,7 +314,7 @@ This was not surprising to me. Nope.
 
 Just for fun, let's add lines showing the mean and median to the histogram.
 
-![plot of chunk unnamed-chunk-23](figure/unnamed-chunk-23-1.png) 
+![plot of chunk fig_6](figure/fig_6-1.png) 
 
 _Figure 6. Histogram showing the distribution of total steps taken per day_  
 _after missing values were replaced with the interval median._  
@@ -397,7 +397,7 @@ ggplot(steps.ave.interval.wd,aes(interval,mean_steps)) +
         panel.border = element_rect(color="black",fill=FALSE))
 ```
 
-![plot of chunk unnamed-chunk-29](figure/unnamed-chunk-29-1.png) 
+![plot of chunk fig_7](figure/fig_7-1.png) 
 
 _Figure 7. Average number of steps by interval for weekdays and weekends_  
 
@@ -463,7 +463,7 @@ ggplot(activity.diff,aes(interval,mean_steps)) +
         panel.border = element_rect(color="black",fill=FALSE))
 ```
 
-![plot of chunk unnamed-chunk-32](figure/unnamed-chunk-32-1.png) 
+![plot of chunk fig_8](figure/fig_8-1.png) 
 
 _Figure 8. Time series plot showing differences in activity level between weekdays_
 _and weekends._

@@ -44,7 +44,7 @@ steps.per.day <- summarise(by_date,total_steps=sum(steps,na.rm=T))
 Using the data frame "steps.per.day", make a histogram showing the distribution
 of total steps taken each day across each of the 61 days for which data were 
 available.
-```{r echo=TRUE, eval=TRUE}
+```{r fig_1, echo=TRUE, eval=TRUE}
 ggplot(steps.per.day,aes(total_steps)) + 
   geom_histogram(fill="deepskyblue",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -69,7 +69,7 @@ summarise(steps.per.day,mean_steps=mean(total_steps),med_steps=median(total_step
 ```
 
 ##### Add mean and median lines to histogram.
-```{r echo=FALSE, eval=TRUE}
+```{r fig_2, echo=FALSE, eval=TRUE}
 ggplot(steps.per.day,aes(total_steps)) + 
   geom_histogram(fill="deepskyblue",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -112,7 +112,7 @@ The resulting data frame has 288 cases (17568 5 min intervals / 61 days), which 
 ##### Create the time series plot using ggplot2 plotting system
 The ggplot2 plotting system is my super favorite plotting system. <3
 Here's my time series plot:
-```{r echo=TRUE, eval=TRUE}
+```{r fig_3, echo=TRUE, eval=TRUE}
 ggplot(steps.ave.interval,aes(interval,mean_steps)) + 
   geom_line(color="blue",size=1) +
   xlab("Interval (5 min / interval)") +
@@ -175,7 +175,7 @@ total.na.interval <- with(data,by(is.na(steps),data[,"interval"],sum,na.rm=T))
 
 It looks like each interval has a total of 8 missing values out of 61 total observations.
 Here's a graph showing the count of missing values across intervals:
-```{r echo=TRUE, eval=TRUE}
+```{r fig_4, echo=TRUE, eval=TRUE}
 plot(total.na.interval,
      main="Count of Missing Observations Per Interval",
      xlab="Interval Index", 
@@ -244,7 +244,7 @@ steps.per.day.nm <- summarise(by_day_nm,total_steps=sum(steps,na.rm=T))
 ```
 
 Now I'll create the updated histogram:
-```{r echo=TRUE, eval=TRUE}
+```{r fig_5, echo=TRUE, eval=TRUE}
 ggplot(steps.per.day.nm,aes(total_steps)) + 
   geom_histogram(fill="darkgreen",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -276,7 +276,7 @@ This was not surprising to me. Nope.
 
 Just for fun, let's add lines showing the mean and median to the histogram.
 
-```{r echo=FALSE, eval=TRUE}
+```{r fig_6, echo=FALSE, eval=TRUE}
 ggplot(steps.per.day.nm,aes(total_steps)) + 
   geom_histogram(fill="darkgreen",color="black",binwidth=700) +
   xlab("Total Steps Per Day") + 
@@ -351,7 +351,7 @@ steps.ave.interval.wd <- summarise(by_interval_weekday,mean_steps=mean(steps,na.
 ```
 
 ##### Create the time series plot using ggplot2:
-```{r echo=TRUE, eval=TRUE}
+```{r fig_7, echo=TRUE, eval=TRUE}
 ggplot(steps.ave.interval.wd,aes(interval,mean_steps)) + 
   geom_line(color="blue",size=1) +
   xlab("Interval (5 min / interval)") +
@@ -405,7 +405,7 @@ that fall above the red line mean that the person was more active for that
 interval on weekdays, and observations that fall below the red line mean
 the person was more active, on average, on weekends.
 
-```{r echo=TRUE, eval=TRUE}
+```{r fig_8, echo=TRUE, eval=TRUE}
 ggplot(activity.diff,aes(interval,mean_steps)) +
   geom_hline(y=0,color="red",linetype="longdash",size=1) +
   geom_line(color="blue",size=1) +
